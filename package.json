@@ -12,8 +12,10 @@
   "license": "ISC",
   "private": "true",
   "dependencies": {
+    "badwords-list": "^1.0.0",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "github-profile-status": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
