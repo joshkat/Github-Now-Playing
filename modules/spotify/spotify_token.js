@@ -3,11 +3,9 @@ const querystring = require("querystring");
 const stream_to_message = require("../stream_to_message.js");
 const get_spotify_id = require("./get_spotify_id.js");
 const user_sessions = require("../database/user_sessions.js");
-const { SPOTIFY_ID, SPOTIFY_SECRET } = process.env;
 
-function spotify_token(state){
-    return function (req, res, next){
-        console.log("HUDIHUIHFUIRHIU")
+function spotify_token(){
+    return (req, res, next) => {
         console.log(req.query.state);
         const token_endpoint = "https://accounts.spotify.com/api/token";
         const post_body = querystring.stringify({
@@ -19,7 +17,7 @@ function spotify_token(state){
             method: "POST",
             headers: {
                 "Content-Type":"application/x-www-form-urlencoded",
-                "Authorization": `Basic ${Buffer.from(`${SPOTIFY_ID}:${SPOTIFY_SECRET}`).toString("base64")}`
+                "Authorization": `Basic ${Buffer.from(`${process.env.SPOTIFY_ID}:${process.env.SPOTIFY_SECRET}`).toString("base64")}`
             }
         }
         const token_request = https.request(token_endpoint, options, (token_response) => {
@@ -33,8 +31,7 @@ function spotify_token(state){
                     //add users spotify refresh token to db
                     user_sessions.set_user_value(req.query.state, "spotify_refresh", spotify_json.refresh_token);
                     //get users unique spotify ID and move on to github auth
-                    get_spotify_id(req.query.state, spotify_json.access_token);
-                    next();
+                    get_spotify_id(req.query.state, spotify_json.access_token, next);
                 }
             });
         });
