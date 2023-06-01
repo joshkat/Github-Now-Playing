@@ -1,12 +1,14 @@
 const https = require("https");
 const querystring = require("querystring");
 const stream_to_message = require("../stream_to_message.js");
-const get_now_playing = require("./get_now_playing.js");
-const refresh_token = require("./refresh_token.js");
+const get_spotify_id = require("./get_spotify_id.js");
+const user_sessions = require("../database/user_sessions.js");
 const { SPOTIFY_ID, SPOTIFY_SECRET } = process.env;
 
-function spotify_token(){
+function spotify_token(state){
     return function (req, res, next){
+        console.log("HUDIHUIHFUIRHIU")
+        console.log(req.query.state);
         const token_endpoint = "https://accounts.spotify.com/api/token";
         const post_body = querystring.stringify({
             grant_type: "authorization_code",
@@ -27,15 +29,11 @@ function spotify_token(){
                     return res.redirect("/");
                 }else{
                     console.log(spotify_json);
-                    res.locals.spotify_refresh = spotify_json.refresh_token;
-                    res.locals.spotify_access_token = spotify_json.access_token;
-                    //set access token for inital request
-                    refresh_token.set_access_token(spotify_json.access_token);
-                    //start refreshing access token
-                    refresh_token.refresh_token(spotify_json.refresh_token);
-                    //calls get now playing function to start fetching and logging current track
-                    get_now_playing();
 
+                    //add users spotify refresh token to db
+                    user_sessions.set_user_value(req.query.state, "spotify_refresh", spotify_json.refresh_token);
+                    //get users unique spotify ID and move on to github auth
+                    get_spotify_id(req.query.state, spotify_json.access_token);
                     next();
                 }
             });
