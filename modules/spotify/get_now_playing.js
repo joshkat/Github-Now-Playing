@@ -33,7 +33,7 @@ function get_now_playing(){
             
             //for testing
             setTimeout(()=> { get_now_playing(token) }, 30000);
-            update_github_status(full_string);
+            update_github_status(full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string);
         });
     }).end();
 }
