@@ -1,38 +1,29 @@
 const express = require("express");
 require("dotenv").config();
+const crypto = require("crypto");
 const app = express();
 const port = 3000;
 
 //modules
 const spotify_redirect = require("./modules/spotify/spotify_redirect.js");
 const spotify_token = require("./modules/spotify/spotify_token.js");
-const get_now_playing = require("./modules/spotify/get_now_playing.js");
-
-//user session
-/**
- * Will contain objects of format:
- *  {
- *      spotify_refresh:"",
- *      github_refresh:"",
- *  }
- */
-let user_session = {};
+const user_sessions = require("./modules/database/user_sessions.js");
 
 // Home page route within this
 app.use(express.static("./public"));
 app.use(express.urlencoded({extended: false}));
 
-app.post("/login", spotify_redirect(),(req,res) => {
-    // when redirect fails -> 404
-    res.status(404).send("You shouldn't be here >:( ");
+app.post("/login", (req,res) => {
+    const state = crypto.randomBytes(20).toString("hex");
+    user_sessions.set_user_value(state);
+    spotify_redirect(res, state);
 });
 
 app.get("/spotify_code", spotify_token(),(req, res) => {
     if(req.query.error){
         return res.redirect("/");
     }else{
-        user_session.spotify_refresh = res.locals.spotify_refresh;
-        res.json(user_session);
+        res.send(user_sessions.get_user(req.query.state));
     }
 });
 
