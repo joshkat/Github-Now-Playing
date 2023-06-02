@@ -27,12 +27,12 @@ function set_user_value(state, key, value){
     }
 }
 
-function get_user(state){
-    return user_sessions.find( inner_obj  => inner_obj.state === state);
+function get_user(spotify_id){
+    return user_sessions.find( inner_obj  => inner_obj.spotify_id === spotify_id);
 }
 
-function user_github_exists(github_auth){
-    if(user_sessions.find( inner => inner.github_auth === github_auth) === undefined){
+function user_github_exists(spotify_id){
+    if(get_user(spotify_id).github_auth === ""){
         return false;
     }
     return true;
