@@ -6,7 +6,6 @@ const user_sessions = require("../database/user_sessions.js");
 
 function spotify_token(){
     return (req, res, next) => {
-        console.log(req.query.state);
         const token_endpoint = "https://accounts.spotify.com/api/token";
         const post_body = querystring.stringify({
             grant_type: "authorization_code",

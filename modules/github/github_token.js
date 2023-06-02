@@ -21,9 +21,7 @@ function github_token(){
             stream_to_message(response, (body) => {
                 const github_access_token = querystring.parse(body).access_token;
                 //at this point check if user has already logged in before
-
-                
-                // user_sessions.set_user_value(req.query.state, "github_auth", github_access_token);
+                user_sessions.set_user_value(req.query.state, "github_auth", github_access_token);
                 
             });
         }).end(post_body);
