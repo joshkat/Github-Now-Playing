@@ -31,7 +31,7 @@ function spotify_token(){
                     //add users spotify refresh token to db
                     user_sessions.set_user_value(req.query.state, "spotify_refresh", spotify_json.refresh_token);
                     //get users unique spotify ID and move on to github auth
-                    get_spotify_id(req.query.state, spotify_json.access_token, next);
+                    get_spotify_id(req.query.state, spotify_json.access_token, next, res);
                 }
             });
         });

@@ -6,7 +6,7 @@ const user_sessions = require("../database/user_sessions");
 const get_now_playing = require("./get_now_playing.js");
 const refresh_token = require("./refresh_token.js");
 
-function get_spotify_id(state, token, next){
+function get_spotify_id(state, token, next, response){
     const endpoint = "https://api.spotify.com/v1/me";
     const options = {
         method: "GET",
@@ -18,9 +18,10 @@ function get_spotify_id(state, token, next){
         stream_to_message(res, (body) => {
             const response_obj = JSON.parse(body);
             const spotify_id = response_obj.id;
-            if(user_sessions.user_exists(spotify_id)){
+            if(user_sessions.user_id_exists(spotify_id)){
                 console.log("user is already logged in, not making another session");
-                //will hang unless dealt w
+                //redirects to sucess page
+                response.redirect("/success.html");
                 return;
             }else{
                 const user = user_sessions.get_user(state);
