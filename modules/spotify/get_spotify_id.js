@@ -18,7 +18,7 @@ function get_spotify_id(state, token, next, response){
         stream_to_message(res, (body) => {
             const response_obj = JSON.parse(body);
             const spotify_id = response_obj.id;
-            if(user_sessions.user_id_exists(spotify_id)){
+            if(user_sessions.user_id_exists(spotify_id) && !user_sessions.get_user(state).github_auth === ""){
                 console.log("user is already logged in, not making another session");
                 //redirects to sucess page
                 response.redirect("/success.html");
