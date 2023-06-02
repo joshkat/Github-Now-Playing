@@ -10,6 +10,7 @@ const github_redirect = require("./modules/github/github_redirect.js");
 
 //db
 const user_sessions = require("./modules/database/user_sessions.js");
+const github_token = require('./modules/github/github_token.js');
 
 // Home page route within this
 app.use(express.static("./public"));
@@ -25,7 +26,7 @@ app.get("/spotify_code", spotify_token(), github_redirect(),(req, res) => {
     }
 });
 
-app.get("/github_code", (req, res) => {
+app.get("/github_code", github_token(),(req, res) => {
     res.send("Received Github Token :) it's " + req.query.code);
 });
 
