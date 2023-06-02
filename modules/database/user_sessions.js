@@ -31,7 +31,14 @@ function get_user(state){
     return user_sessions.find( inner_obj  => inner_obj.state === state);
 }
 
-function user_exists(spotify_id){
+function user_github_exists(github_auth){
+    if(user_sessions.find( inner => inner.github_auth === github_auth) === undefined){
+        return false;
+    }
+    return true;
+}
+
+function user_id_exists(spotify_id){
     if(user_sessions.find( inner => inner.spotify_id === spotify_id) === undefined){
         return false;
     }
@@ -41,5 +48,6 @@ function user_exists(spotify_id){
 module.exports = {
     set_user_value: set_user_value,
     get_user: get_user,
-    user_exists: user_exists, //T or F value will be used to determine if I need to add a new session or not
+    user_github_exists: user_github_exists,
+    user_id_exists: user_id_exists
 }
