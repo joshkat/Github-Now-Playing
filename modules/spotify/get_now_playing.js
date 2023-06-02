@@ -15,25 +15,22 @@ function get_now_playing(){
     }
     https.request(np_endpoint, options, (res) => {
         stream_to_message(res, (body) => {
-            if(body.length === 0){
-                console.log("Nothing currently streaming");
-                //have set timeout every 30seconds here so once streaming begins itll know
-                setTimeout(()=> { get_now_playing(token) }, 30000);
-                return;
-            }
+          if (body.length === 0) {
+            console.log("Nothing currently streaming");
+          } else {
             const np_json = JSON.parse(body);
-            //format how you want str to look here
-            //then send to github
-            let artist = cleanup_string(np_json?.item?.artists[0]?.name);
-            let song = cleanup_string(np_json?.item?.name);
-
-
-            const full_string = `${artist} - ${song}`;
-            console.log(full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string);
-            
-            //for testing
-            setTimeout(()=> { get_now_playing(token) }, 30000);
-            update_github_status(full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string);
+            if (np_json.currently_playing_type !== "track") {
+              console.log("Not currently listening to a song");
+            } else {
+              let artist = cleanup_string(np_json?.item?.artists[0]?.name);
+              let song = cleanup_string(np_json?.item?.name);
+        
+              const full_string = `${artist} - ${song}`;
+              console.log(full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string);
+              update_github_status(full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string);
+            }
+          }
+          setTimeout(() => { get_now_playing(token) }, 30000);
         });
     }).end();
 }
