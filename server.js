@@ -27,7 +27,10 @@ app.get("/spotify_code", spotify_token(), github_redirect(),(req, res) => {
 });
 
 app.get("/github_code", github_token(),(req, res) => {
-    res.send("Received Github Token :) it's " + req.query.code);
+    if(req.query.error){
+        return res.redirect("/");
+    }
+    res.redirect("/success.html");
 });
 
 app.listen(port, () => {
