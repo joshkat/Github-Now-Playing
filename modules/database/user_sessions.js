@@ -31,6 +31,10 @@ function get_user(spotify_id){
     return user_sessions.find( inner_obj  => inner_obj.spotify_id === spotify_id);
 }
 
+function get_user_from_state(state){
+    return user_sessions.find( inner_obj  => inner_obj.state === state);
+}
+
 function user_github_exists(spotify_id){
     if(get_user(spotify_id).github_auth === ""){
         return false;
@@ -49,5 +53,6 @@ module.exports = {
     set_user_value: set_user_value,
     get_user: get_user,
     user_github_exists: user_github_exists,
-    user_id_exists: user_id_exists
+    user_id_exists: user_id_exists,
+    get_user_from_state: get_user_from_state
 }

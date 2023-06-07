@@ -5,7 +5,7 @@ const user_sessions = require("../database/user_sessions.js");
 
 function github_token(){
     return(req, res, next) => {
-        if(req.query.code === undefined){
+        if(user_sessions.get_user_from_state(req.query.state) === undefined){
             res.redirect("/");
             return;
         }
@@ -27,6 +27,7 @@ function github_token(){
                 //at this point begin loop to upload np to github
                 user_sessions.set_user_value(req.query.state, "github_auth", github_access_token);
 
+                console.log(user_sessions.get_user_from_state(req.query.state), "final thing before redirect");
             });
         }).end(post_body);
         next();
