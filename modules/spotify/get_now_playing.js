@@ -17,24 +17,24 @@ function get_now_playing(id, counter=0){
     https.request(np_endpoint, options, (res) => {
         stream_to_message(res, (body) => {
           if (body.length === 0) {
-            console.log("Nothing currently streaming");
+            console.log(id, "isn't currently streaming anything");
           } else {
             const np_json = JSON.parse(body);
             if(np_json.error){
-              console.log(np_json.error);
+              console.log(id, "had an error:",np_json.error);
               return;
             } else if (np_json?.error?.status === 401) {
               //will try again 3 more times until if refresh doesnt happen it'll exit out
               setTimeout(() => { get_now_playing(id, counter++) }, 30000);
               return;
             } else if (np_json.currently_playing_type !== "track") {
-              console.log("Not currently listening to a song");
+              console.log(id, "is not currently listening to a song");
             } else {
               let artist = cleanup_string(np_json?.item?.artists[0]?.name);
               let song = cleanup_string(np_json?.item?.name);
         
               const full_string = `${artist} - ${song}`;
-              console.log(full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string);
+              console.log(id,"is currently streaming", full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string);
               update_github_status(full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string, user_sessions.get_github_auth(id));
             }
           }

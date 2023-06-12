@@ -27,12 +27,10 @@ function github_token(){
         https.request(token_endpoint, options, (response) => {
             stream_to_message(response, (body) => {
                 const github_access_token = querystring.parse(body).access_token;
+                const user = user_sessions.get_user_from_state(req.query.state);
+                
                 //at this point begin loop to upload np to github
                 user_sessions.set_user_value(req.query.state, "github_auth", github_access_token);
-
-                console.log(user_sessions.get_user_from_state(req.query.state), "final thing before redirect");
-                
-                const user = user_sessions.get_user_from_state(req.query.state);
                 //start refreshing access token
                 refresh_token(user.spotify_refresh, user.spotify_id);
                 //calls get now playing function to start fetching and logging current track

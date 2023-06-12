@@ -2,7 +2,6 @@ const querystring = require("querystring");
 
 function github_redirect(){
     return (req, res, next) => {
-        console.log("Redirecting to Github!");
         const auth_endpoint = "https://github.com/login/oauth/authorize";
         const query_params = querystring.stringify({
             scope: "user",

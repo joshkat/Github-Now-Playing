@@ -25,6 +25,4 @@ function refresh_token(token, id){
     })}).end(post_body);
 }
 
-module.exports = {
-    refresh_token: refresh_token,
-}
+module.exports = refresh_token;

@@ -17,8 +17,7 @@ function get_spotify_id(state, token, next, response){
             user_sessions.set_user_value(state, "spotify_id", spotify_id);
 
             if(user_sessions.user_id_exists(spotify_id) && user_sessions.user_github_exists(spotify_id)){
-                console.log("user is already logged in, not making another session");
-                //redirects to sucess page
+                //redirects to sucess page when user already logged in
                 response.redirect("/success.html");
                 return;
             }else{
