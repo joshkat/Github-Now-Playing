@@ -28,6 +28,8 @@ app.get("/spotify_code", spotify_token(), github_redirect(),(req, res) => {
 
 app.get("/github_code", github_token(),(req, res) => {
     if(req.query.error){
+        user_sessions.remove_user(req.query.state);
+        console.log(req.query.error);
         return res.redirect("/");
     }
     res.redirect("/success.html");

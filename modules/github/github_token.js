@@ -5,7 +5,7 @@ const user_sessions = require("../database/user_sessions.js");
 
 function github_token(){
     return(req, res, next) => {
-        if(user_sessions.get_user_from_state(req.query.state) === undefined){
+        if(user_sessions.get_user_from_state(req.query.state) === undefined || req.query.error){
             res.redirect("/");
             return;
         }

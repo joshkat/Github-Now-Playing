@@ -47,7 +47,7 @@ function get_spotify_access(id){
 }
 
 function user_github_exists(spotify_id){
-    if(get_user(spotify_id).github_auth === ""){
+    if(get_user(spotify_id).github_auth === "" || get_user(spotify_id).github_auth === undefined){
         return false;
     }
     return true;
@@ -60,12 +60,19 @@ function user_id_exists(spotify_id){
     return true;
 }
 
+function remove_user(state){
+    //used for when github is denied
+    const index_to_remove = user_sessions.findIndex( inner_obj => inner_obj.state === state);
+    user_sessions.splice(index_to_remove, 1);
+}
+
 module.exports = {
     set_user_value: set_user_value,
     set_spotify_access: set_spotify_access,
     get_user: get_user,
+    get_user_from_state: get_user_from_state,
     get_spotify_access: get_spotify_access,
     user_github_exists: user_github_exists,
     user_id_exists: user_id_exists,
-    get_user_from_state: get_user_from_state
+    remove_user: remove_user,
 }
