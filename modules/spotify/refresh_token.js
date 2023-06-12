@@ -1,11 +1,10 @@
 const https = require("https");
 const querystring = require("querystring");
-
+const user_sessions = require("../database/user_sessions.js");
 const stream_to_message = require("../stream_to_message.js");
 const { SPOTIFY_ID, SPOTIFY_SECRET } = process.env;
-let access_token = "";
 
-function refresh_token(token){
+function refresh_token(token, id){
     const token_endpoint = "https://accounts.spotify.com/api/token";
     const post_body = querystring.stringify({
         "grant_type":"refresh_token",
@@ -21,17 +20,11 @@ function refresh_token(token){
 
     https.request(token_endpoint, options, (response) => { stream_to_message(response, (body) => {
         const refresh_json = JSON.parse(body);
-        access_token = refresh_json.access_token;
+        user_sessions.set_spotify_access(refresh_json.access_token, id);
         setTimeout(() => { refresh_token(token) }, refresh_json.expires_in * 1000);
     })}).end(post_body);
 }
 
-function set_access_token(token) {
-    access_token = token;
-}
-
 module.exports = {
-    get_access_token: () => access_token,
     refresh_token: refresh_token,
-    set_access_token: set_access_token
 }
