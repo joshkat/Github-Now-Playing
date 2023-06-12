@@ -1,11 +1,11 @@
 const https = require("https");
 const stream_to_message = require("../stream_to_message.js");
 const update_github_status = require("../update_github_status.js");
-const refresh_spotify = require("./refresh_token.js");
+const user_sessions = require("../database/user_sessions.js");
 const bad_words = require("badwords-list").object;
 
-function get_now_playing(){
-    const token = refresh_spotify.get_access_token();
+function get_now_playing(id){
+    const token = user_sessions.get_spotify_access(id);
     const np_endpoint = "https://api.spotify.com/v1/me/player/currently-playing";
     const options = {
         method: "GET",
@@ -30,7 +30,7 @@ function get_now_playing(){
               update_github_status(full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string);
             }
           }
-          setTimeout(() => { get_now_playing(token) }, 30000);
+          setTimeout(() => { get_now_playing(id) }, 30000);
         });
     }).end();
 }
