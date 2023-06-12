@@ -29,8 +29,6 @@ function spotify_token(){
                 if(spotify_json.error){
                     return res.redirect("/");
                 }else{
-                    console.log(spotify_json);
-
                     //add users spotify refresh token to db
                     user_sessions.set_user_value(req.query.state, "spotify_refresh", spotify_json.refresh_token);
                     //get users unique spotify ID and move on to github auth
