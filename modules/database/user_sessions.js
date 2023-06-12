@@ -46,6 +46,11 @@ function get_spotify_access(id){
     return user_sessions[index].spotify_access;
 }
 
+function get_github_auth(id){
+    const index = user_sessions.findIndex( inner_obj => inner_obj.spotify_id === id);
+    return user_sessions[index].github_auth;
+}
+
 function user_github_exists(spotify_id){
     if(get_user(spotify_id).github_auth === "" || get_user(spotify_id).github_auth === undefined){
         return false;
@@ -72,6 +77,7 @@ module.exports = {
     get_user: get_user,
     get_user_from_state: get_user_from_state,
     get_spotify_access: get_spotify_access,
+    get_github_auth: get_github_auth,
     user_github_exists: user_github_exists,
     user_id_exists: user_id_exists,
     remove_user: remove_user,

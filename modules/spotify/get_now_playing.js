@@ -27,7 +27,7 @@ function get_now_playing(id){
         
               const full_string = `${artist} - ${song}`;
               console.log(full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string);
-              update_github_status(full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string);
+              update_github_status(full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string, user_sessions.get_github_auth(id));
             }
           }
           setTimeout(() => { get_now_playing(id) }, 30000);
