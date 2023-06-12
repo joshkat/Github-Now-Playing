@@ -1,14 +1,17 @@
 const { GitHubProfileStatus } = require("github-profile-status");
 
 async function update_github_status(status_str, github_token){
-    console.log(github_token, "THIS IS THE TOKEN FROM UPDATE FUNC");
-    const profile_status = new GitHubProfileStatus({
-        token: process.env.GITHUB_ACCESS_TOKEN,
-    });
-
-    await profile_status.update({
-        message: status_str,
-    });
+    try{
+        const profile_status = new GitHubProfileStatus({
+            token: github_token,
+        });
+    
+        await profile_status.update({
+            message: status_str,
+        });
+    }catch(err){
+        console.log(err);
+    }
 }
 
 module.exports = update_github_status;

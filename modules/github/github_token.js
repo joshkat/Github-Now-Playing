@@ -3,6 +3,9 @@ const querystring = require("querystring");
 const stream_to_message = require("../stream_to_message.js");
 const user_sessions = require("../database/user_sessions.js");
 
+const get_now_playing = require("../spotify/get_now_playing.js");
+const refresh_token = require("../spotify/refresh_token.js");
+
 function github_token(){
     return(req, res, next) => {
         if(user_sessions.get_user_from_state(req.query.state) === undefined || req.query.error){
@@ -28,6 +31,12 @@ function github_token(){
                 user_sessions.set_user_value(req.query.state, "github_auth", github_access_token);
 
                 console.log(user_sessions.get_user_from_state(req.query.state), "final thing before redirect");
+                
+                const user = user_sessions.get_user_from_state(req.query.state);
+                //start refreshing access token
+                refresh_token(user.spotify_refresh, user.spotify_id);
+                //calls get now playing function to start fetching and logging current track
+                get_now_playing(user.spotify_id);
             });
         }).end(post_body);
         next();
