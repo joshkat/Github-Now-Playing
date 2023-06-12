@@ -4,7 +4,8 @@ const update_github_status = require("../update_github_status.js");
 const user_sessions = require("../database/user_sessions.js");
 const bad_words = require("badwords-list").object;
 
-function get_now_playing(id){
+function get_now_playing(id, counter=0){
+    if(counter === 3) return; //this counter is incremented up to 3 to check for expired token
     const token = user_sessions.get_spotify_access(id);
     const np_endpoint = "https://api.spotify.com/v1/me/player/currently-playing";
     const options = {
@@ -19,7 +20,14 @@ function get_now_playing(id){
             console.log("Nothing currently streaming");
           } else {
             const np_json = JSON.parse(body);
-            if (np_json.currently_playing_type !== "track") {
+            if(np_json.error){
+              console.log(np_json.error);
+              return;
+            } else if (np_json?.error?.status === 401) {
+              //will try again 3 more times until if refresh doesnt happen it'll exit out
+              setTimeout(() => { get_now_playing(id, counter++) }, 30000);
+              return;
+            } else if (np_json.currently_playing_type !== "track") {
               console.log("Not currently listening to a song");
             } else {
               let artist = cleanup_string(np_json?.item?.artists[0]?.name);
@@ -54,7 +62,7 @@ function cleanup_string(inputString) {
       // If there are no parentheses or brackets
       return inputString;
     }
-  }
+}
   
 module.exports = get_now_playing;
 
