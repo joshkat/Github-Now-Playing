@@ -20,11 +20,17 @@ function set_user_value(state, key, value){
             spotify_refresh: "",
             github_auth:"",
             spotify_id: "",
+            spotify_access: "",
         });
     }else{
         const index = user_sessions.findIndex( obj => obj.state === state);
         user_sessions[index][key] = value;
     }
+}
+
+function set_spotify_access(spotify_access, id){
+    const index = user_sessions.findIndex( inner_obj => inner_obj.spotify_id === id);
+    user_sessions[index].spotify_access = spotify_access;
 }
 
 function get_user(spotify_id){
@@ -33,6 +39,11 @@ function get_user(spotify_id){
 
 function get_user_from_state(state){
     return user_sessions.find( inner_obj  => inner_obj.state === state);
+}
+
+function get_spotify_access(id){
+    const index = user_sessions.findIndex( inner_obj => inner_obj.spotify_id === id);
+    return user_sessions[index].spotify_access;
 }
 
 function user_github_exists(spotify_id){
@@ -51,7 +62,9 @@ function user_id_exists(spotify_id){
 
 module.exports = {
     set_user_value: set_user_value,
+    set_spotify_access: set_spotify_access,
     get_user: get_user,
+    get_spotify_access: get_spotify_access,
     user_github_exists: user_github_exists,
     user_id_exists: user_id_exists,
     get_user_from_state: get_user_from_state
