@@ -1,6 +1,6 @@
 const https = require("https");
 const stream_to_message = require("../stream_to_message.js");
-const update_github_status = require("../update_github_status.js");
+const update_github_status = require("../github/update_github_status.js");
 const user_sessions = require("../database/user_sessions.js");
 const bad_words = require("badwords-list").object;
 
