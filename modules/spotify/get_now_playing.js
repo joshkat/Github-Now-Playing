@@ -33,8 +33,9 @@ function get_now_playing(id, counter=0){
               let artist = cleanup_string(np_json?.item?.artists[0]?.name);
               let song = cleanup_string(np_json?.item?.name);
         
-              const full_string = `${artist} - ${song}`;
-              console.log(id,"is currently streaming", full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string);
+              const full_string = `${artist} - ${song}`.length > 80 ? `${artist} - ${song}`.slice(0,77) + "..." : `${artist} - ${song}`;
+              const date = new Date();
+              console.log(`\x1b[32m${id}\x1b[0m is currently streaming \x1b[34m${full_string}\x1b[0m @ \x1b[35m${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} \x1b[0m`); //<id> is currently streaming <song_name> @ <date>
               update_github_status(full_string.length > 80 ? full_string.slice(0, 77) + `...` : full_string, user_sessions.get_github_auth(id));
             }
           }
