@@ -21,7 +21,7 @@ function refresh_token(token, id){
     https.request(token_endpoint, options, (response) => { stream_to_message(response, (body) => {
         const refresh_json = JSON.parse(body);
         user_sessions.set_spotify_access(refresh_json.access_token, id);
-        setTimeout(() => { refresh_token(token) }, refresh_json.expires_in * 1000);
+        setTimeout(() => { refresh_token(token, id) }, refresh_json.expires_in * 1000);
     })}).end(post_body);
 }
 
