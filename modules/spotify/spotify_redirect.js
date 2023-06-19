@@ -8,7 +8,7 @@ function spotify_redirect(){
         const query_params = querystring.stringify({
             client_id: process.env.SPOTIFY_ID,
             response_type: "code",
-            redirect_uri: "http://localhost:3000/spotify_code",
+            redirect_uri: process.env.REDIRECT_URL?`${process.env.REDIRECT_URL}/spotify_code`:"http://localhost:3000/spotify_code",
             scope: "user-read-currently-playing user-read-private user-read-email",
             state: state
         });

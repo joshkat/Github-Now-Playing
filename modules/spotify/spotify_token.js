@@ -14,7 +14,7 @@ function spotify_token(){
         const post_body = querystring.stringify({
             grant_type: "authorization_code",
             code: req.query.code,
-            redirect_uri: "http://localhost:3000/spotify_code"
+            redirect_uri: process.env.REDIRECT_URL?`${process.env.REDIRECT_URL}/spotify_code`:"http://localhost:3000/spotify_code"
         });
         const options = {
             method: "POST",
