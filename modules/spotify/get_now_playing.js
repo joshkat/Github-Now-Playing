@@ -48,6 +48,9 @@ function get_now_playing(id, counter=0){
 }
 
 function cleanup_string(inputString) {
+  if(inputString.charAt(0) === "(" || inputString.charAt(0) === "["){
+    return inputString;
+  }
     const firstOpeningParenthesisIndex = inputString.indexOf('(');
     const firstOpeningBracketIndex = inputString.indexOf('[');
     const firstHyphenIndex = inputString.indexOf('-'); 
